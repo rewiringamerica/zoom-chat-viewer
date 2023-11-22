@@ -1,4 +1,4 @@
-import { Message, parseMessages } from "../_data/parseMessages";
+import { Message, Reaction, parseMessages } from "../_data/parseMessages";
 
 function Emojis({ reactions }: { reactions: Reaction[] }) {
   if (!reactions.length) {
