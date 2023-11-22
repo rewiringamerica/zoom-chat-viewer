@@ -18,10 +18,10 @@ type Message = {
 };
 
 function parseMessages(text: string): Message[] {
-  const messageRegex = /(\d\d:\d\d:\d\d) From (.*) To Everyone/;
-  const reactionRegex = /Reacted to "(.*)" with (.*)/;
-  const replyRegex = /Replying to "(.*)"/;
-  const unReactionRegex = /Removed a (.*) reaction from "(.*)"/;
+  const messageRegex = /(\d\d:\d\d:\d\d) From (.*) To Everyone/i;
+  const reactionRegex = /Reacted to "(.*)" with (.*)/i;
+  const replyRegex = /Replying to "(.*)"/i;
+  const unReactionRegex = /Removed a (.*) reaction from "(.*)"/i;
 
   const lines = text.split("\n");
 
@@ -83,9 +83,12 @@ function parseMessages(text: string): Message[] {
         };
         messages.push(message);
       }
+    } else {
+      console.log(`"${line}"does not appear to be a message`);
     }
   }
 
+  // console.log("finding replies out of messages", messages.length);
   const replies: Message[] = [];
   messages.forEach((message) => {
     const replyResult = replyRegex.exec(message.textLines[0]);
@@ -100,6 +103,7 @@ function parseMessages(text: string): Message[] {
     }
   });
 
+  // console.log("indexing messages", messages.length);
   const messagesBySnippet: Record<string, Message> = {};
   messages.forEach((message) => {
     let firstLine = message.textLines[0];
@@ -120,6 +124,7 @@ function parseMessages(text: string): Message[] {
     messagesBySnippet[reactionSnippetHack3] = message;
   });
 
+  // console.log("aggregating replies", replies.length);
   replies.forEach((reply) => {
     const message = messagesBySnippet[reply.replySnippet!];
     if (message) {
@@ -129,6 +134,7 @@ function parseMessages(text: string): Message[] {
     }
   });
 
+  // console.log("aggregating reactions", reactions.length);
   reactions.forEach((reaction) => {
     const message = messagesBySnippet[reaction.snippet] as Message;
     if (message) {
@@ -138,6 +144,7 @@ function parseMessages(text: string): Message[] {
     }
   });
 
+  // console.log("observing unreactions", unreactions.length);
   unreactions.forEach((unreaction) => {
     const message = messagesBySnippet[unreaction.snippet] as Message;
     if (message) {
@@ -192,11 +199,11 @@ function ChatMessage({ message }: { message: Message }) {
       <div className="mb-2">
         <div className="bg-slate-100 p-2 rounded-md w-full">
           <p className="overflow-hidden [overflow-wrap:anywhere]">
-            {message.textLines.map((line) => (
-              <>
+            {message.textLines.map((line, i) => (
+              <span key={`${message.id}-${i}`}>
                 {line}
                 <br />
-              </>
+              </span>
             ))}
           </p>
         </div>
@@ -246,14 +253,14 @@ export default function ZoomChat({ text }: { text: string }) {
   return (
     <div className="flex flex-col items-start justify-center p-10">
       {messages.map((message, i, messages) => (
-        <>
+        <div key={message.id}>
           {needsTimestamp(message, i, messages) ? (
             <Timestamp timestamp={message.timestamp} />
           ) : (
             <></>
           )}
           <ChatMessage key={message.id} message={message} />
-        </>
+        </div>
       ))}
     </div>
   );
