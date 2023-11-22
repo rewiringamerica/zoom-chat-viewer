@@ -24,14 +24,6 @@ export default function DragAndDrop({ files, setFiles }: DragAndDropParams) {
     }
   }
 
-  function handleSubmitFile(e: any) {
-    if (files.length === 0) {
-      // no file has been submitted
-    } else {
-      // write submit logic here
-    }
-  }
-
   function handleDrop(e: any) {
     e.preventDefault();
     e.stopPropagation();
@@ -61,18 +53,6 @@ export default function DragAndDrop({ files, setFiles }: DragAndDropParams) {
     setDragActive(true);
   }
 
-  function removeFile(fileName: any, idx: any) {
-    const newArr = [...files];
-    newArr.splice(idx, 1);
-    setFiles([]);
-    setFiles(newArr);
-  }
-
-  function openFileExplorer() {
-    inputRef.current.value = "";
-    inputRef.current.click();
-  }
-
   return (
     <form
       className={`${
@@ -84,7 +64,6 @@ export default function DragAndDrop({ files, setFiles }: DragAndDropParams) {
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
     >
-      {/* this input element allows us to select files for upload. We make it hidden so we can activate it when the user clicks select files */}
       <input
         placeholder="fileInput"
         className="hidden"
@@ -94,39 +73,7 @@ export default function DragAndDrop({ files, setFiles }: DragAndDropParams) {
         onChange={handleChange}
         accept=".txt"
       />
-
-      <p>
-        Drop a zoom chat here!
-        {/* or{" "}
-          <span
-            className="font-bold text-blue-600 cursor-pointer"
-            onClick={openFileExplorer}
-          >
-            <u>Select file</u>
-          </span>{" "}
-          to upload */}
-      </p>
-
-      {/* <div className="flex flex-col items-center p-3">
-          {files.map((file: any, idx: any) => (
-            <div key={idx} className="flex flex-row space-x-5">
-              <span>{file.name}</span>
-              <span
-                className="text-red-500 cursor-pointer"
-                onClick={() => removeFile(file.name, idx)}
-              >
-                remove
-              </span>
-            </div>
-          ))}
-        </div> */}
-
-      {/* <button
-          className="bg-black rounded-lg p-2 mt-3 w-auto"
-          onClick={handleSubmitFile}
-        >
-          <span className="p-2 text-white">Submit</span>
-        </button> */}
+      <p>Drop a zoom chat here!</p>
     </form>
   );
 }
