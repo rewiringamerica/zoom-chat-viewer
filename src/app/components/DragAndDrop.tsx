@@ -74,31 +74,30 @@ export default function DragAndDrop({ files, setFiles }: DragAndDropParams) {
   }
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <form
-        className={`${
-          dragActive ? "bg-blue-400" : "bg-blue-100"
-        }  p-4 w-1/3 rounded-lg  min-h-[10rem] text-center flex flex-col items-center justify-center`}
-        onDragEnter={handleDragEnter}
-        onSubmit={(e) => e.preventDefault()}
-        onDrop={handleDrop}
-        onDragLeave={handleDragLeave}
-        onDragOver={handleDragOver}
-      >
-        {/* this input element allows us to select files for upload. We make it hidden so we can activate it when the user clicks select files */}
-        <input
-          placeholder="fileInput"
-          className="hidden"
-          ref={inputRef}
-          type="file"
-          multiple={false}
-          onChange={handleChange}
-          accept=".txt"
-        />
+    <form
+      className={`${
+        dragActive ? "bg-blue-400" : "bg-blue-100"
+      } p-2 w-full rounded-lg min-h-[10rem] text-center flex flex-col items-center justify-center`}
+      onDragEnter={handleDragEnter}
+      onSubmit={(e) => e.preventDefault()}
+      onDrop={handleDrop}
+      onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
+    >
+      {/* this input element allows us to select files for upload. We make it hidden so we can activate it when the user clicks select files */}
+      <input
+        placeholder="fileInput"
+        className="hidden"
+        ref={inputRef}
+        type="file"
+        multiple={false}
+        onChange={handleChange}
+        accept=".txt"
+      />
 
-        <p>
-          Drop a zoom chat here!
-          {/* or{" "}
+      <p>
+        Drop a zoom chat here!
+        {/* or{" "}
           <span
             className="font-bold text-blue-600 cursor-pointer"
             onClick={openFileExplorer}
@@ -106,9 +105,9 @@ export default function DragAndDrop({ files, setFiles }: DragAndDropParams) {
             <u>Select file</u>
           </span>{" "}
           to upload */}
-        </p>
+      </p>
 
-        {/* <div className="flex flex-col items-center p-3">
+      {/* <div className="flex flex-col items-center p-3">
           {files.map((file: any, idx: any) => (
             <div key={idx} className="flex flex-row space-x-5">
               <span>{file.name}</span>
@@ -122,13 +121,12 @@ export default function DragAndDrop({ files, setFiles }: DragAndDropParams) {
           ))}
         </div> */}
 
-        {/* <button
+      {/* <button
           className="bg-black rounded-lg p-2 mt-3 w-auto"
           onClick={handleSubmitFile}
         >
           <span className="p-2 text-white">Submit</span>
         </button> */}
-      </form>
-    </div>
+    </form>
   );
 }

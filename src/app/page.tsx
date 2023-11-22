@@ -23,11 +23,13 @@ export default function Home() {
   }, [files]);
 
   return (
-    <main>
+    <main className="max-w-xs sm:max-w-sm md:max-w-md mx-auto ">
       {text ? (
         <ZoomChat text={text}></ZoomChat>
       ) : (
-        <DragAndDrop files={files} setFiles={setFiles}></DragAndDrop>
+        <div className="flex items-center justify-center h-screen">
+          <DragAndDrop files={files} setFiles={setFiles}></DragAndDrop>
+        </div>
       )}
     </main>
   );

@@ -209,7 +209,7 @@ export default function ZoomChat({ text }: { text: string }) {
   const messages = parseMessages(text);
 
   return (
-    <div className="flex flex-col items-start justify-center p-10 max-w-md sm:max-w-sm mx-auto">
+    <div className="flex flex-col items-start justify-center p-10">
       {messages.map((message, i, messages) => (
         <>
           {needsTimestamp(message, i, messages) ? (
