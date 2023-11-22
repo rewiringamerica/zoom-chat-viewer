@@ -21,11 +21,13 @@ function parseMessages(text: string): Message[] {
   const messageRegex = /(\d\d:\d\d:\d\d) From (.*) To Everyone/;
   const reactionRegex = /Reacted to "(.*)" with (.*)/;
   const replyRegex = /Replying to "(.*)"/;
+  const unReactionRegex = /Removed a (.*) reaction from "(.*)"/;
 
   const lines = text.split("\n");
 
   const messages = [];
   const reactions = [];
+  const unreactions = [];
 
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i];
@@ -51,7 +53,21 @@ function parseMessages(text: string): Message[] {
           // we assume if we found a reaction that we don't have a message and we don't keep peeking
           break;
         } else {
-          textLines.push(content);
+          let unReactionResult = unReactionRegex.exec(content);
+          if (unReactionResult) {
+            let [___, emoji, snippet] = unReactionResult;
+            unreactions.push({
+              id,
+              snippet,
+              emoji,
+              author,
+              timestamp,
+            });
+            // we assume if we found an ureaction that we don't have a message and we don't keep peeking
+            break;
+          } else {
+            textLines.push(content);
+          }
         }
         peek = i + 1 < lines.length && lines[i + 1];
       }
@@ -122,6 +138,25 @@ function parseMessages(text: string): Message[] {
     }
   });
 
+  unreactions.forEach((unreaction) => {
+    const message = messagesBySnippet[unreaction.snippet] as Message;
+    if (message) {
+      for (let i = 0; i < message.reactions.length; i++) {
+        const reaction = message.reactions[i];
+        const removed =
+          reaction.emoji === unreaction.emoji &&
+          reaction.author === unreaction.author;
+        if (removed) {
+          message.reactions.splice(i, 1);
+          // we found one, bail out of the loop:
+          break;
+        }
+      }
+    } else {
+      console.warn("no message found for unreaction:", unreaction.snippet);
+    }
+  });
+
   return messages.filter((message) => !message.isReply);
 }
 
@@ -155,8 +190,8 @@ function ChatMessage({ message }: { message: Message }) {
     <div className="mb-2">
       <p className="text-slate-400 text-xs mb-1">{message.author}</p>
       <div className="mb-2">
-        <div className="bg-slate-100 p-2 rounded-md">
-          <p>
+        <div className="bg-slate-100 p-2 rounded-md w-full">
+          <p className="overflow-hidden [overflow-wrap:anywhere]">
             {message.textLines.map((line) => (
               <>
                 {line}
