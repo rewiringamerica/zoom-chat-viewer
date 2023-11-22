@@ -29,6 +29,16 @@ export default function Home() {
       ) : (
         <div className="flex items-center justify-center h-screen">
           <DragAndDrop files={files} setFiles={setFiles}></DragAndDrop>
+          <p className="fixed bottom-0 left-0 right-0 text-center pb-2 text-sm text-slate-600">
+            © 2023 Rewiring America. Runs entirely client-side, no data will
+            leave your browser.{" "}
+            <a
+              href="https://github.com/rewiringamerica/zoom-chat-viewer"
+              className="underline"
+            >
+              Distributed as open source under MIT license.
+            </a>
+          </p>
         </div>
       )}
     </main>
