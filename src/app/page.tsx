@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DragAndDrop from "./components/DragAndDrop";
-import ZoomChat from "./components/ZoomChat";
+import DragAndDrop from "./_components/DragAndDrop";
+import ZoomChat from "./_components/ZoomChat";
 
 export default function Home() {
   const [files, setFiles] = useState<any>([]);
